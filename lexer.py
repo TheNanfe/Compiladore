@@ -115,7 +115,7 @@ class Lexer():
 
 
 #se crea el objeto 	
-a = Lexer
+lexer = Lexer
 
 #se crea un archivo intermedio de texto, el cual no contien espacios, tabs ni saltos de linea
 fuente = open('fuente.txt', 'r')
@@ -137,11 +137,13 @@ for whole_line in input_file.readlines():
 		#necesitan ser saltados una x cantidad de caracteres.
 		
 			if skip_characters == 0:
-				values = a.token_finder(caracter, whole_line, index)
+				values = lexer.token_finder(caracter, whole_line, index)
 				output_file.write(values[1])
-				if caracter == '{' or caracter == ',' or caracter == '[' or caracter == '}'	or caracter == ']':
+
+				if caracter != ":" and lexer.symbol_finder(caracter):
 					output_file.write('\n')
 				skip_characters = values[0]
+
 			else:
 				skip_characters = skip_characters - 1
 	except Exception as e:
@@ -154,5 +156,5 @@ for whole_line in input_file.readlines():
 			break
 input_file.close()
 output_file.close()
-print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este scripot.\nPor favor verificar dicho archivo")
+print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este script.\nPor favor verificar dicho archivo")
 
