@@ -1,15 +1,16 @@
-import re
+import re #libreria utilizada para crear un arhivos sin espacios, tabs ni saltos de linea
 
 class Lexer():
 	def __init__(self):
 		pass
+	
+	#todos los metodos de la clase
 
 	@classmethod
 	def cadena(self, partial_string):
 		count = 0
 		total_count = 0
 		for caracter in partial_string:
-			print(caracter)
 			total_count = total_count + 1
 			if caracter == "'" or caracter == '"':
 				count = count + 1
@@ -24,12 +25,13 @@ class Lexer():
 		total_count = 0
 		for caracter in partial_string:
 			try:
-				#print(caracter)
 				int(caracter)
 				total_count = total_count + 1
 			except Exception as e:
 				if total_count!=0:
 					return [total_count-1, "number "]
+				else:
+					return False
 
 		if total_count!=0:
 					return [total_count-1, "number "]
@@ -67,6 +69,7 @@ class Lexer():
 			return "coma "
 		return False
 
+	#encuentra el simbolo
 	@classmethod
 	def symbol_finder(self, caracter):
 		symbol_array = [self.l_llave, self.r_llave, self.l_corchete, self.r_corchete, 
@@ -79,6 +82,7 @@ class Lexer():
 
 		return False
 
+	#se define que tipo de token es
 	@classmethod
 	def token_finder(self, caracter, whole_string, index):
 		symbol = self.symbol_finder(caracter)
@@ -89,7 +93,6 @@ class Lexer():
 		if caracter == "'" or caracter == '"':
 			cadena = self.cadena(whole_string[index:])
 			if cadena:
-				print(cadena)
 				return cadena
 
 
@@ -111,35 +114,45 @@ class Lexer():
 		return False
 
 
-	
+#se crea el objeto 	
 a = Lexer
+
+#se crea un archivo intermedio de texto, el cual no contien espacios, tabs ni saltos de linea
 fuente = open('fuente.txt', 'r')
 input_file = open("sin_espacios.txt", 'w')
-
 for x in fuente.readlines():
 	input_file.write(re.sub(r"[\t\n\s]*", "", x))
 input_file.close()
 
 
-
+#se procede a leer el archivo sin espacios y a escribir en el output.txt
 input_file = open("sin_espacios.txt", 'r')
 output_file = open('output.txt', 'w')
 for whole_line in input_file.readlines():
-	#print(whole_line)
 	skip_characters = 0
-	for index, caracter in enumerate(whole_line):
-
-		if skip_characters == 0:
-			print(caracter, index)
-			values = a.token_finder(caracter, whole_line, index)
-			output_file.write(values[1])
-			if caracter == '{' or caracter == ',' or caracter == '[' or caracter == '}'	or caracter == ']':
-				output_file.write('\n')
-			skip_characters = values[0]
-		else:
-			skip_characters = skip_characters - 1
-
-
-
-#def cadena(literal):
+	#en caso de que exista algun caracter que no exista en el diccionario, se cancela la escritura del archivo.
+	try:
+		for index, caracter in enumerate(whole_line):
+		#cuando son cadenas o caracteres, false, null o true, tienen una lectura especial 
+		#necesitan ser saltados una x cantidad de caracteres.
+		
+			if skip_characters == 0:
+				values = a.token_finder(caracter, whole_line, index)
+				output_file.write(values[1])
+				if caracter == '{' or caracter == ',' or caracter == '[' or caracter == '}'	or caracter == ']':
+					output_file.write('\n')
+				skip_characters = values[0]
+			else:
+				skip_characters = skip_characters - 1
+	except Exception as e:
+			print("---------------------------------------------------------------------")
+			print(".\n.\nSe ha detectado algo que no pertenece al diccionario.\n.\n.")
+			print("La del escritura del output ha parado")
+			print("---------------------------------------------------------------------")
+			input_file.close()
+			output_file.close()
+			break
+input_file.close()
+output_file.close()
+print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este scripot.\nPor favor verificar dicho archivo")
 
