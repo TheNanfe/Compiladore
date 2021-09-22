@@ -1,10 +1,23 @@
 import re #libreria utilizada para crear un arhivos sin espacios, tabs ni saltos de linea
 
 class Lexer():
-	def __init__(self):
-		pass
+	def __init__(self, fuente = 'fuente.txt', input_path = 'input.txt', output_path = 'output.txt'):
+		self.fuente = fuente
+		self.input_path = input_path	
+		self.output_path = output_path
 	
 	#todos los metodos de la clase
+
+	#se crea un archivo intermedio de texto, el cual no contien espacios, tabs ni saltos de linea
+	def crear_sin_espacios(self):
+		print(self.fuente)
+		fuente = open(self.fuente, 'r')
+		input_file = open(self.input_path, 'w')
+		for x in fuente.readlines():
+			input_file.write(re.sub(r"[\t\n\s]*", "", x))
+		
+		input_file.close()
+		fuente.close()
 
 	@classmethod
 	def cadena(self, partial_string):
@@ -113,48 +126,47 @@ class Lexer():
 
 		return False
 
+	#se procede a leer el archivo sin espacios y a escribir en el output.txt
+	def get_tokens(self):
+		self.crear_sin_espacios()
+
+		input_file = open(self.input_path, 'r')
+		output_file = open(self.output_path, 'w')
+		for whole_line in input_file.readlines():
+			skip_characters = 0
+			#en caso de que exista algun caracter que no exista en el diccionario, se cancela la escritura del archivo.
+			try:
+				for index, caracter in enumerate(whole_line):
+				#cuando son cadenas o caracteres, false, null o true, tienen una lectura especial 
+				#necesitan ser saltados una x cantidad de caracteres.
+				
+					if skip_characters == 0:
+						values = self.token_finder(caracter, whole_line, index)
+						output_file.write(values[1])
+
+						if caracter != ":" and self.symbol_finder(caracter):
+							output_file.write('\n')
+						skip_characters = values[0]
+
+					else:
+						skip_characters = skip_characters - 1
+			except Exception as e:
+					print("---------------------------------------------------------------------")
+					print(".\n.\nSe ha detectado algo que no pertenece al diccionario.\n.\n.")
+					print("La del escritura del output ha parado")
+					print("---------------------------------------------------------------------")
+					input_file.close()
+					output_file.close()
+					break
+		input_file.close()
+		output_file.close()
+		
+		print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este script.\nPor favor verificar dicho archivo")
+
+
+
 
 #se crea el objeto 	
-lexer = Lexer
-
-#se crea un archivo intermedio de texto, el cual no contien espacios, tabs ni saltos de linea
-fuente = open('fuente.txt', 'r')
-input_file = open("sin_espacios.txt", 'w')
-for x in fuente.readlines():
-	input_file.write(re.sub(r"[\t\n\s]*", "", x))
-input_file.close()
-
-
-#se procede a leer el archivo sin espacios y a escribir en el output.txt
-input_file = open("sin_espacios.txt", 'r')
-output_file = open('output.txt', 'w')
-for whole_line in input_file.readlines():
-	skip_characters = 0
-	#en caso de que exista algun caracter que no exista en el diccionario, se cancela la escritura del archivo.
-	try:
-		for index, caracter in enumerate(whole_line):
-		#cuando son cadenas o caracteres, false, null o true, tienen una lectura especial 
-		#necesitan ser saltados una x cantidad de caracteres.
-		
-			if skip_characters == 0:
-				values = lexer.token_finder(caracter, whole_line, index)
-				output_file.write(values[1])
-
-				if caracter != ":" and lexer.symbol_finder(caracter):
-					output_file.write('\n')
-				skip_characters = values[0]
-
-			else:
-				skip_characters = skip_characters - 1
-	except Exception as e:
-			print("---------------------------------------------------------------------")
-			print(".\n.\nSe ha detectado algo que no pertenece al diccionario.\n.\n.")
-			print("La del escritura del output ha parado")
-			print("---------------------------------------------------------------------")
-			input_file.close()
-			output_file.close()
-			break
-input_file.close()
-output_file.close()
-print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este script.\nPor favor verificar dicho archivo")
+lexer = Lexer()
+lexer.get_tokens()
 
