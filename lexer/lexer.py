@@ -165,8 +165,8 @@ class Lexer():
 
 
 
-
-#se crea el objeto 	
-lexer = Lexer()
-lexer.get_tokens()
+if __name__ == '__main__':
+	#se crea el objeto 	
+	lexer = Lexer()
+	lexer.get_tokens()
 
