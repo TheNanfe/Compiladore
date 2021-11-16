@@ -1,7 +1,8 @@
 import re #libreria utilizada para crear un arhivos sin espacios, tabs ni saltos de linea
+import os
 
 class Lexer():
-	def __init__(self, fuente = 'fuente.txt', input_path = 'input.txt', output_path = 'output.txt'):
+	def __init__(self, fuente = 'lexer/fuente.txt', input_path = 'lexer/input.txt', output_path = 'lexer/output.txt'):
 		self.fuente = fuente
 		self.input_path = input_path	
 		self.output_path = output_path
@@ -151,22 +152,24 @@ class Lexer():
 					else:
 						skip_characters = skip_characters - 1
 			except Exception as e:
-					print("---------------------------------------------------------------------")
+					print("############################### Mensaje LEXER:   ##################################")
 					print(".\n.\nSe ha detectado algo que no pertenece al diccionario.\n.\n.")
 					print("La del escritura del output ha parado")
-					print("---------------------------------------------------------------------")
+					print("###################################################################################")
 					input_file.close()
 					output_file.close()
 					break
 		input_file.close()
 		output_file.close()
 		
-		print("Se ha generado el OUTPUT.TXT en la misma carpeta contenedora de este script.\nPor favor verificar dicho archivo")
+		print("#############################   Mensaje LEXER:   ##################################")
+		print(".\nSe ha generado el archivo output.txt en el directorio de './lexer/\n.")
+		print("###################################################################################")
 
 
 
-
-#se crea el objeto 	
-lexer = Lexer()
-lexer.get_tokens()
+if __name__ == '__main__':
+	#se crea el objeto 	
+	lexer = Lexer()
+	lexer.get_tokens()
 
