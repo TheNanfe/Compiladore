@@ -77,7 +77,6 @@ class Traductor():
 				self.corchete()
 
 			if self.token == '}':
-				#print(self.token, llave_position)
 				if corchete_position != 0:
 					self.increase_tabs(-1)
 					string = ["\t"*self.tabs_numbers, "</",tag_value,">"]
@@ -218,6 +217,6 @@ if __name__ == '__main__':
 		fp.writelines(lines[1:])
 
 
-	print("::::::::::::::::::::::::::::::::::::  Analizador Sintactico  ::::::::::::::::::::::::::::::::")
-	print(".\nSe ha generado el archivo .xml.\n.")
+	print("::::::::::::::::::::::::::::::::::::  Traductor  ::::::::::::::::::::::::::::::::")
+	print(".\nSe ha generado el archivo .xml en esta carptea.\n.")
 	print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
