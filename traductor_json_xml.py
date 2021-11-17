@@ -146,7 +146,11 @@ class Translate():
 					if self.lexer_token == 'string' or self.lexer_token == 'number':
 						tag = self.separated_simbols[self.absolute_position-2]
 						string = ['<',tag,'>',self.token,'</',tag,'>']
-						print(string)
+						self.write_file(string)
+
+					if self.lexer_token == 'pr_true' or self.lexer_token == 'pr_false' or self.lexer_token == 'null':
+						tag = self.separated_simbols[self.absolute_position-2]
+						string = ['<',tag,'>',self.token,'</',tag,'>']
 						self.write_file(string)
 
 					if self.lexer_token == 'l_llave':
@@ -173,8 +177,11 @@ class Translate():
 							primer_caracter = token_cierre
 							bandera_primer_caracter = 1
 			self.tranlsate_next_token(1)
-		self.increase_tabs(-1)
-		self.write_file(primer_caracter)
+			if self.absolute_position == len(self.separated_simbols)-1:
+				self.increase_tabs(-1)
+				self.write_file(primer_caracter)
+
+		
 	
 
 
