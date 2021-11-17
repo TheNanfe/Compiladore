@@ -143,7 +143,12 @@ class Translate():
 				self.tranlsate_next_token(1)
 				if self.lexer_token == 'dos_puntos':
 					self.tranlsate_next_token(1)
-					if self.lexer_token == 'string' or self.lexer_token == 'number':
+					if self.lexer_token == 'string':
+						tag = self.separated_simbols[self.absolute_position-2]
+						string = ['<',tag,'>','"',self.token,'"','</',tag,'>']
+						self.write_file(string)
+					
+					if self.lexer_token == 'number':
 						tag = self.separated_simbols[self.absolute_position-2]
 						string = ['<',tag,'>',self.token,'</',tag,'>']
 						self.write_file(string)
