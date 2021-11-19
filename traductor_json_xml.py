@@ -184,9 +184,6 @@ class Translate():
 						string.insert(1, '/')
 						token_cierre = string
 						closures_llave.append([''.join(token_cierre), self.tabs_numbers])
-						if bandera_primer_caracter == 0:
-							primer_caracter = token_cierre
-							bandera_primer_caracter = 1
 					
 					if self.lexer_token == 'l_corchete':
 						tag = self.separated_simbols[self.absolute_position-2]
